@@ -4,7 +4,7 @@
 #include <vector>
 #include <memory>
 
-using std::cout, std::endl, std::string, std::unique_ptr, std::vector;
+using std::cout, std::endl, std::string, std::unique_ptr, std::vector, std::make_unique;
 
 class IFileSysObject
 {
@@ -21,7 +21,7 @@ class File : public IFileSysObject
 public:
     int size() override
     {
-        cout << "Size of File " << name_ << " is:" << size << endl;
+        cout << "Size of File " << name_ << " is:" << size_ << endl;
         return size_;
     }
     File(string name, int size) : name_(std::move(name)), size_(size) {};
@@ -37,11 +37,14 @@ class Directory : public IFileSysObject
     int size_ = 0;
 
 public:
-    Directory(string name, vector<unique_ptr<IFileSysObject>> consist) : name_(std::move(name)), consist_(std::move(consist)) {};
+    Directory(string name) : name_(std::move(name)) {}
+    void AddFile(File file) {
+        consist_.push_back(make_unique<File>(file));
+    }
     int size() override
     {
         int size = 0;
-        for (auto obj = consist_.begin(); obj <= consist_.end(); obj++)
+        for (auto obj = consist_.begin(); obj < consist_.end(); obj++)
         {
             size += (obj)->get()->size();
         }

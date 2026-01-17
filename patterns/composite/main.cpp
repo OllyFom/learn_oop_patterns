@@ -1,7 +1,9 @@
 #include "classes.hpp"
 
 int main() {
-    std::vector<std::unique_ptr<IFileSysObject>> consist = {new File("file1"), new File("file2")};
-    Directory dir("dir1", consist);
+    Directory dir("dir1");
+    File f1("file1"), f2("file2");
+    dir.AddFile(std::move(f1));
+    dir.AddFile(std::move(f2));
     dir.size();
 }
